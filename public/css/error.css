@@ -1,1 +1,1 @@
-.error-panel { min-height: 55vh; padding-top: 130px; }.error-panel h1 { margin-bottom: 35px; }
+.error-panel { min-height: 55vh; padding-bottom: 80px; padding-top: 130px; }.error-panel h1 { font-size: clamp(3rem, 7vw, 6rem); margin-bottom: 35px; }
