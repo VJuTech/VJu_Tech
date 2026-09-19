@@ -27,7 +27,7 @@ app.use('/register', authRateLimit);
 app.use('/forgot-password', authRateLimit);
 app.use('/reset-password', authRateLimit);
 app.use(session({
-	store: new pgSession({ pool: db.pool, tableName: 'session' }),
+	store: new pgSession({ pool: db.pool, tableName: 'session', createTableIfMissing: true }),
 	secret: env.sessionSecret,
 	resave: false,
 	saveUninitialized: false,
