@@ -1,0 +1,4 @@
+<%- include('../partials/head', { title, pageCss: 'blog' }) %>
+<section class="page-heading page-shell"><p class="eyebrow">Insights</p><h1>Notes from the work.</h1><p>Practical thinking on digital products, delivery, and building things that last.</p></section>
+<section class="article-list page-shell"><% if (!posts.length) { %><p class="empty-state">Published insights will appear here soon.</p><% } %><% posts.forEach((post) => { %><article><p class="case-number">Insight</p><h2><%= post.title %></h2><p><%= post.excerpt || post.body.slice(0, 180) %></p></article><% }) %></section>
+<%- include('../partials/foot') %>

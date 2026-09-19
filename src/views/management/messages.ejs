@@ -1,0 +1,3 @@
+<%- include('../partials/head', { title, pageCss: 'management-list' }) %>
+<section class="page-heading page-shell"><p class="eyebrow">Admin / messages</p><h1>Project conversations.</h1></section><section class="data-list page-shell"><% if (!messages.length) { %><p class="empty-state">No project messages have been sent.</p><% } %><% messages.forEach((message) => { %><article><div><strong><%= message.sender_name %></strong><span>Project #<%= message.project_id %></span></div><p><%= message.body %></p></article><% }) %></section>
+<%- include('../partials/foot') %>

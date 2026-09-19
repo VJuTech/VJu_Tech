@@ -1,0 +1,3 @@
+<%- include('../partials/head', { title, pageCss: 'management-list' }) %>
+<section class="page-heading page-shell"><p class="eyebrow">Admin / enquiries</p><h1>Service inquiries.</h1></section><section class="data-list page-shell"><% if (!inquiries.length) { %><p class="empty-state">No service inquiries have been submitted.</p><% } %><% inquiries.forEach((inquiry) => { %><article><div><strong><%= inquiry.name %></strong><span><%= inquiry.email %></span></div><p><%= inquiry.project_description %></p><small><%= inquiry.status %> · <%= inquiry.budget ? inquiry.budget : 'Budget not provided' %></small></article><% }) %></section>
+<%- include('../partials/foot') %>

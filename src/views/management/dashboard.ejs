@@ -1,0 +1,4 @@
+<%- include('../partials/head', { title, pageCss: 'dashboard' }) %>
+<section class="page-heading page-shell"><p class="eyebrow">Client portal</p><h1>Your projects.</h1><p>A focused view of milestones, conversations, and files.</p></section>
+<section class="dashboard-list page-shell"><% if (!projects.length) { %><div class="dashboard-empty"><h2>Your project space is ready for its first brief.</h2><p>Once your engagement begins, progress updates and shared files will appear here.</p></div><% } else { %><% projects.forEach((project) => { %><a class="project-row" href="/dashboard/projects/<%= project.id %>"><div><p class="case-number"><%= project.status.replace('_', ' ') %></p><h2><%= project.name %></h2></div><strong><%= project.progress %>%</strong></a><% }) %><% } %></section>
+<%- include('../partials/foot') %>

@@ -1,0 +1,3 @@
+<%- include('../partials/head', { title, pageCss: 'management-list' }) %>
+<section class="page-heading page-shell"><p class="eyebrow">Admin / users</p><h1>People in the system.</h1></section><section class="data-list page-shell"><% if (!users.length) { %><p class="empty-state">No users have registered yet.</p><% } %><% users.forEach((user) => { %><article><div><strong><%= user.full_name %></strong><span><%= user.email %></span></div><p><%= user.role %></p><small>Joined <%= user.created_at.toISOString().slice(0, 10) %></small></article><% }) %></section>
+<%- include('../partials/foot') %>

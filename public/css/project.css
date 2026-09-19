@@ -1,0 +1,1 @@
+.project-detail { display: grid; gap: 10vw; grid-template-columns: .7fr 1.3fr; padding-bottom: 80px; }.message-panel { border-top: 1px solid var(--line); padding-top: 24px; }.message { border-bottom: 1px solid var(--line); padding: 16px 0; }.message strong { color: var(--purple); }
