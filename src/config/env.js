@@ -20,6 +20,8 @@ module.exports = {
   databaseUrl: process.env.DATABASE_URL,
   databaseSsl: process.env.DATABASE_SSL === 'true',
   sessionSecret: process.env.SESSION_SECRET || 'replace-this-session-secret',
+  sessionIdleTimeoutMs: Number(process.env.SESSION_IDLE_TIMEOUT_MS || 30 * 60 * 1000),
+  appUrl: process.env.APP_URL || `http://localhost:${process.env.PORT || 3000}`,
   smtp: {
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT || 587),

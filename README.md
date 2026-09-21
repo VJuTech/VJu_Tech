@@ -49,3 +49,14 @@ The project remains on Node.js and Express as established in the product bluepri
 - Terminate TLS at Render or the production reverse proxy; the application redirects non-HTTPS production requests.
 - Run `src/database/rebuild.sql` against the target PostgreSQL database before starting the service.
 - Configure SMTP values in `.env` before enabling email notifications.
+
+## Seeded administrator and backups
+
+The rebuild schema seeds a development administrator:
+
+- Email: `admin@vjutech.com`
+- Password: `VjuTechAdmin!2026`
+
+Change this password immediately in any shared or production environment.
+
+Run `scripts/backup-database.ps1` daily from Windows Task Scheduler or an operations job. It uses `pg_dump` and `DATABASE_URL` to create timestamped PostgreSQL custom-format backups.

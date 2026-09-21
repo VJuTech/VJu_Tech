@@ -1,6 +1,7 @@
 const crypto = require('node:crypto');
 const bcrypt = require('bcryptjs');
 const userModel = require('../models/userModel');
+const mailer = require('../services/mailer');
 
 function renderRegister(req, res) { res.render('account/register', { title: 'Create an account', account: null }); }
 function renderLogin(req, res) { res.render('account/login', { title: 'Client login', account: null }); }
@@ -18,6 +19,7 @@ async function register(req, res, next) {
     }
     const user = await userModel.createUser({ fullName, email, passwordHash: await bcrypt.hash(password, 12) });
     req.session.userId = user.id;
+    req.session.lastActivityAt = Date.now();
     await userModel.recordActivity(user.id, 'register', req);
     return res.redirect('/dashboard');
   } catch (error) { return next(error); }
@@ -34,6 +36,7 @@ async function login(req, res, next) {
     await userModel.recordActivity(user.id, 'login', req);
     await new Promise((resolve, reject) => req.session.regenerate((error) => error ? reject(error) : resolve()));
     req.session.userId = user.id;
+    req.session.lastActivityAt = Date.now();
     return res.redirect(['admin', 'staff'].includes(user.role) ? '/admin' : '/dashboard');
   } catch (error) { return next(error); }
 }
@@ -51,6 +54,7 @@ async function requestPasswordReset(req, res, next) {
     if (user) {
       const token = crypto.randomBytes(32).toString('hex');
       await userModel.createResetToken(user.id, crypto.createHash('sha256').update(token).digest('hex'), new Date(Date.now() + 60 * 60 * 1000));
+      await mailer.sendPasswordReset({ to: user.email, token });
     }
     return res.render('account/forgot-password', { title: 'Reset your password', account: { success: 'If that email is registered, reset instructions have been sent.' } });
   } catch (error) { return next(error); }

@@ -9,6 +9,7 @@ const errorHandler = require('./middleware/errorHandler');
 const { loadUser } = require('./middleware/auth');
 const { helmet, compression, generalRateLimit, authRateLimit, requireHttps } = require('./middleware/security');
 const { csrfToken, verifyCsrf } = require('./middleware/csrf');
+const upload = require('./middleware/upload');
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use(session({
 	saveUninitialized: false,
 	cookie: { httpOnly: true, sameSite: 'lax', secure: env.nodeEnv === 'production', maxAge: 1000 * 60 * 60 * 8 }
 }));
+app.use('/dashboard/projects/:id/files', upload.single('file'));
 app.use(csrfToken);
 app.use(verifyCsrf);
 app.use(loadUser);

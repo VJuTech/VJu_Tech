@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS message_attachments, messages, project_updates, project_files, projects, notifications, password_reset_tokens, blog_posts, portfolio_items, contact_messages, inquiries, user_activity, users, session CASCADE;
+DROP TABLE IF EXISTS message_attachments, messages, project_updates, project_files, projects, notifications, password_reset_tokens, blog_posts, portfolio_items, contact_messages, inquiries, audit_log, user_activity, users, session CASCADE;
 
 CREATE TABLE session (
   sid VARCHAR NOT NULL COLLATE "default",
@@ -25,6 +25,17 @@ CREATE TABLE user_activity (
   action VARCHAR(80) NOT NULL,
   ip_address INET,
   user_agent TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE audit_log (
+  id BIGSERIAL PRIMARY KEY,
+  actor_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
+  action VARCHAR(100) NOT NULL,
+  entity_type VARCHAR(80),
+  entity_id BIGINT,
+  metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+  ip_address INET,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
@@ -149,9 +160,16 @@ CREATE TABLE notifications (
 );
 
 CREATE INDEX user_activity_user_id_idx ON user_activity(user_id);
+CREATE INDEX audit_log_actor_id_idx ON audit_log(actor_id);
+CREATE INDEX audit_log_created_at_idx ON audit_log(created_at DESC);
 CREATE INDEX projects_client_id_idx ON projects(client_id);
 CREATE INDEX project_updates_project_id_idx ON project_updates(project_id);
 CREATE INDEX project_files_project_id_idx ON project_files(project_id);
 CREATE INDEX messages_project_id_idx ON messages(project_id);
 CREATE INDEX message_attachments_message_id_idx ON message_attachments(message_id);
 CREATE INDEX notifications_user_id_idx ON notifications(user_id);
+
+-- Development/demo administrator. Change this password immediately in production.
+INSERT INTO users (full_name, email, password_hash, role)
+VALUES ('VJU Tech Administrator', 'admin@vjutech.com', 'AlwaysBusy@247', 'admin')
+ON CONFLICT (email) DO UPDATE SET role = 'admin';

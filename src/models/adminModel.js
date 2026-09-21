@@ -20,4 +20,9 @@ async function findMessages() {
   return result.rows;
 }
 
-module.exports = { findUsers, findInquiries, findProjects, findMessages };
+async function findClients() {
+  const result = await db.query("SELECT id, full_name, email FROM users WHERE role = 'client' ORDER BY full_name ASC");
+  return result.rows;
+}
+
+module.exports = { findUsers, findInquiries, findProjects, findMessages, findClients };

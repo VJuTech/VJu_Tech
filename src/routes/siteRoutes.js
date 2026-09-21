@@ -5,6 +5,7 @@ const authController = require('../controllers/authController');
 const { requireAuth, requireAdmin } = require('../middleware/auth');
 const portalController = require('../controllers/portalController');
 const adminController = require('../controllers/adminController');
+const reportController = require('../controllers/reportController');
 
 const router = express.Router();
 
@@ -29,11 +30,16 @@ router.post('/logout', authController.logout);
 router.get('/dashboard', requireAuth, portalController.dashboard);
 router.get('/dashboard/projects/:id', requireAuth, portalController.project);
 router.post('/dashboard/projects/:id/messages', requireAuth, portalController.sendMessage);
+router.post('/dashboard/projects/:id/files', requireAuth, portalController.uploadFile);
+router.get('/dashboard/projects/:id/files/:fileId', requireAuth, portalController.downloadFile);
 router.get('/admin', requireAdmin, adminController.overview);
 router.get('/admin/inquiries', requireAdmin, adminController.inquiries);
 router.get('/admin/projects', requireAdmin, adminController.projects);
+router.get('/admin/projects/new', requireAdmin, adminController.newProject);
+router.post('/admin/projects', requireAdmin, adminController.createProject);
 router.get('/admin/users', requireAdmin, adminController.users);
 router.get('/admin/content', requireAdmin, adminController.content);
 router.get('/admin/messages', requireAdmin, adminController.messages);
+router.get('/admin/reports', requireAdmin, reportController.index);
 
 module.exports = router;
