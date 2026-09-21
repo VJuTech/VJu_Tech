@@ -3,6 +3,16 @@ const path = require('node:path');
 const db = require('./connect');
 
 const requiredTables = ['session', 'users', 'inquiries', 'projects', 'messages', 'notifications', 'audit_log'];
+const adminPasswordHash = '$2a$12$Ta9ZnCKKHxWyrbTVtK0va.AHr3RQBQbm0aRRd9C.4v9uW6HO5icPq';
+
+async function ensureAdminAccount() {
+  await db.query(
+    `INSERT INTO users (full_name, email, password_hash, role)
+     VALUES ('VJU Tech Administrator', 'admin@vjutech.com', $1, 'admin')
+     ON CONFLICT (email) DO UPDATE SET password_hash = EXCLUDED.password_hash, role = 'admin'`,
+    [adminPasswordHash]
+  );
+}
 
 async function initializeDatabase() {
   const result = await db.query(
@@ -14,7 +24,10 @@ async function initializeDatabase() {
   );
   const existingTables = new Set(result.rows.map((row) => row.table_name));
 
-  if (existingTables.size === requiredTables.length) return;
+  if (existingTables.size === requiredTables.length) {
+    await ensureAdminAccount();
+    return;
+  }
   if (existingTables.size > 0) {
     const missingTables = requiredTables.filter((table) => !existingTables.has(table));
     if (missingTables.length === 1 && missingTables[0] === 'audit_log') {
@@ -31,10 +44,8 @@ async function initializeDatabase() {
         );
         CREATE INDEX IF NOT EXISTS audit_log_actor_id_idx ON audit_log(actor_id);
         CREATE INDEX IF NOT EXISTS audit_log_created_at_idx ON audit_log(created_at DESC);
-        INSERT INTO users (full_name, email, password_hash, role)
-        VALUES ('VJU Tech Administrator', 'admin@vjutech.com', '$2a$12$xmm0odbTQNCuRw/onRxgDuX1RivEyAsNg5MEkygMJQmiEcdfFoSzG', 'admin')
-        ON CONFLICT (email) DO UPDATE SET role = 'admin';
       `);
+      await ensureAdminAccount();
       console.log('PostgreSQL audit schema initialized.');
       return;
     }

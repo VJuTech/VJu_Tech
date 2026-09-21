@@ -171,5 +171,5 @@ CREATE INDEX notifications_user_id_idx ON notifications(user_id);
 
 -- Development/demo administrator. Change this password immediately in production.
 INSERT INTO users (full_name, email, password_hash, role)
-VALUES ('VJU Tech Administrator', 'admin@vjutech.com', 'AlwaysBusy@247', 'admin')
-ON CONFLICT (email) DO UPDATE SET role = 'admin';
+VALUES ('VJU Tech Administrator', 'admin@vjutech.com', '$2a$12$Ta9ZnCKKHxWyrbTVtK0va.AHr3RQBQbm0aRRd9C.4v9uW6HO5icPq', 'admin')
+ON CONFLICT (email) DO UPDATE SET password_hash = EXCLUDED.password_hash, role = 'admin';
