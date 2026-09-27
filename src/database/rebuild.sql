@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS message_attachments, messages, project_updates, project_files, projects, notifications, password_reset_tokens, blog_posts, portfolio_items, contact_messages, inquiries, audit_log, user_activity, users, session CASCADE;
+DROP TABLE IF EXISTS message_attachments, messages, project_updates, project_files, projects, notifications, password_reset_tokens, blog_posts, portfolio_items, contact_messages, inquiries, audit_log, user_activity, checkout_carts, users, session CASCADE;
 
 CREATE TABLE session (
   sid VARCHAR NOT NULL COLLATE "default",

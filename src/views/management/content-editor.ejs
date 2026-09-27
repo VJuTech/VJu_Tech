@@ -1,0 +1,39 @@
+<%- include('../partials/head', { title, pageCss: 'content-admin' }) %>
+<% const isPortfolio = type === 'portfolio'; const action = item ? `/admin/content/${type}/${item.id}` : `/admin/content/new/${type}`; const currentImage = item?.image_key || item?.imageKey || ''; %>
+<section class="page-heading page-shell"><p class="eyebrow">Admin / <%= isPortfolio ? 'portfolio' : 'blog' %></p><h1><%= item ? 'Refine this piece.' : `Create a ${isPortfolio ? 'case study' : 'blog post'}.` %></h1><p>Save as a draft while you work, then publish when the content is ready for the public site.</p></section>
+<form class="content-editor page-shell" action="<%= action %>" method="post" enctype="multipart/form-data">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+  <div class="editor-main">
+    <label for="content-title">Title</label>
+    <input id="content-title" name="title" value="<%= item?.title || '' %>" required>
+    <label for="content-slug">URL slug</label>
+    <input id="content-slug" name="slug" value="<%= item?.slug || '' %>" placeholder="A clean URL is generated from the title">
+    <small>Use lowercase words separated by hyphens.</small>
+    <% if (isPortfolio) { %>
+      <label for="content-summary">Short summary</label>
+      <textarea id="content-summary" name="summary" rows="3" required><%= item?.summary || '' %></textarea>
+      <label for="content-description">Full description</label>
+      <textarea id="content-description" name="description" rows="8"><%= item?.description || '' %></textarea>
+      <label for="content-link">Project link</label>
+      <input id="content-link" name="projectLink" type="url" value="<%= item?.project_link || '' %>" placeholder="https://example.com">
+    <% } else { %>
+      <label for="content-excerpt">Excerpt</label>
+      <textarea id="content-excerpt" name="excerpt" rows="3"><%= item?.excerpt || '' %></textarea>
+      <label for="content-body">Article body</label>
+      <textarea id="content-body" name="body" rows="16" required><%= item?.body || '' %></textarea>
+      <small>Plain text is supported. Keep paragraphs short for comfortable reading.</small>
+    <% } %>
+    <label for="content-image">Image path or URL</label>
+    <input id="content-image" name="imageKey" value="<%= currentImage %>" placeholder="/images/site/project-name.jpg">
+    <small>Use an existing URL/path, or upload an image below. An uploaded image takes priority.</small>
+    <label for="content-image-file">Upload image</label>
+    <input id="content-image-file" name="imageFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+    <small>JPG, PNG, WebP, or GIF up to 5 MB.</small>
+    <% if (currentImage) { %><img class="editor-image-preview" src="<%= currentImage %>" alt="Current content image"><% } %>
+    <div class="editor-publish"><label><input type="checkbox" name="published"<%= item?.published ? ' checked' : '' %>> Publish this content</label><span>Published entries appear on the public <%= isPortfolio ? 'portfolio' : 'blog' %> page.</span></div>
+    <div class="editor-actions"><button class="button button-blue" type="submit"><%= item ? 'Save changes' : 'Create draft' %> <span aria-hidden="true">→</span></button><a class="button button-dark" href="/admin/content">Cancel</a></div>
+  </div>
+  <aside class="editor-guide"><p class="eyebrow">Publishing checklist</p><h2>Make it useful.</h2><ul><li>Use a specific, honest title.</li><li>Write for the people you want to reach.</li><li>Check links and image paths before publishing.</li><li>Keep drafts private until they are ready.</li></ul></aside>
+</form>
+<%- include('../partials/foot') %>

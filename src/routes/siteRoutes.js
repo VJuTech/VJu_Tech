@@ -40,11 +40,17 @@ router.post('/dashboard/projects/:id/files', requireAuth, portalController.uploa
 router.get('/dashboard/projects/:id/files/:fileId', requireAuth, portalController.downloadFile);
 router.get('/admin', requireAdmin, adminController.overview);
 router.get('/admin/inquiries', requireAdmin, adminController.inquiries);
+router.post('/admin/inquiries/:id/status', requireAdmin, adminController.updateInquiryStatus);
 router.get('/admin/projects', requireAdmin, adminController.projects);
 router.get('/admin/projects/new', requireAdmin, adminController.newProject);
 router.post('/admin/projects', requireAdmin, adminController.createProject);
 router.get('/admin/users', requireAdmin, adminController.users);
 router.get('/admin/content', requireAdmin, adminController.content);
+router.get('/admin/content/new/:type', requireAdmin, adminController.newContent);
+router.get('/admin/content/:type/:id/edit', requireAdmin, adminController.editContent);
+router.post('/admin/content/new/:type', requireAdmin, adminController.saveContent);
+router.post('/admin/content/:type/:id', requireAdmin, adminController.saveContent);
+router.post('/admin/content/:type/:id/delete', requireAdmin, adminController.deleteContent);
 router.get('/admin/messages', requireAdmin, adminController.messages);
 router.get('/admin/reports', requireAdmin, reportController.index);
 

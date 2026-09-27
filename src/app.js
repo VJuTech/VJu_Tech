@@ -35,6 +35,8 @@ app.use(session({
 	cookie: { httpOnly: true, sameSite: 'lax', secure: env.nodeEnv === 'production', maxAge: 1000 * 60 * 60 * 8 }
 }));
 app.use('/dashboard/projects/:id/files', upload.single('file'));
+app.use('/admin/content/new/:type', upload.contentImage.single('imageFile'));
+app.use('/admin/content/:type/:id', upload.contentImage.single('imageFile'));
 app.use(csrfToken);
 app.use(verifyCsrf);
 app.use(loadUser);

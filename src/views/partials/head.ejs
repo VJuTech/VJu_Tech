@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="csrf-token" content="<%= csrfToken %>">
+  <meta name="csrf-token" content="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">
   <title><%= title %> | VJU Tech Limited</title>
   <link rel="stylesheet" href="/css/base.css?v=20260927-brand">
   <link rel="stylesheet" href="/css/<%= pageCss || 'home' %>.css?v=20260927-brand">
