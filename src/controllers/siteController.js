@@ -1,4 +1,5 @@
 const contentModel = require('../models/contentModel');
+const { packages, addOnCatalog } = require('../config/packages');
 
 function renderHome(req, res) {
   res.render('index', { title: 'Digital products with lasting value' });
@@ -10,6 +11,10 @@ function renderAbout(req, res) {
 
 function renderServices(req, res) {
   res.render('page/services', { title: 'Services that move business forward' });
+}
+
+function renderPackages(req, res) {
+  res.render('page/packages', { title: 'Website packages and pricing', packages, addOns: addOnCatalog });
 }
 
 async function renderPortfolio(req, res, next) {
@@ -37,6 +42,6 @@ function renderRegister(req, res) {
 }
 
 module.exports = {
-  renderHome, renderAbout, renderServices, renderPortfolio, renderContact, renderInquiry,
+  renderHome, renderAbout, renderServices, renderPackages, renderPortfolio, renderContact, renderInquiry,
   renderBlog, renderLogin, renderRegister
 };

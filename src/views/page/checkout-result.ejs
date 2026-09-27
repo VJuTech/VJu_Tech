@@ -1,0 +1,3 @@
+<%- include('../partials/head', { title, pageCss: 'checkout' }) %>
+<section class="checkout-result page-shell"><div class="result-mark <%= success ? 'result-success' : 'result-error' %>" aria-hidden="true"><%= success ? '✓' : '!' %></div><p class="eyebrow"><%= success ? 'Payment confirmed' : 'Payment update' %></p><h1><%= success ? 'Thank you for choosing VJU Tech.' : 'We could not complete that payment.' %></h1><p><%= message %></p><a class="button button-dark" href="/"><%= success ? 'Return to VJU Tech' : 'Return to checkout' %> <span>↗</span></a></section>
+<%- include('../partials/foot') %>

@@ -159,6 +159,25 @@ CREATE TABLE notifications (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE checkout_carts (
+  id BIGSERIAL PRIMARY KEY,
+  session_id VARCHAR(255) NOT NULL UNIQUE,
+  package_key VARCHAR(30) NOT NULL CHECK (package_key IN ('basic', 'standard', 'premium')),
+  package_name VARCHAR(80) NOT NULL,
+  package_price NUMERIC(14, 2) NOT NULL CHECK (package_price >= 0),
+  add_ons JSONB NOT NULL DEFAULT '[]'::jsonb,
+  total NUMERIC(14, 2) NOT NULL CHECK (total >= 0),
+  customer_name VARCHAR(160),
+  customer_email VARCHAR(255),
+  company VARCHAR(160),
+  transaction_ref VARCHAR(180) UNIQUE,
+  flutterwave_transaction_id VARCHAR(180),
+  payment_status VARCHAR(30) NOT NULL DEFAULT 'pending' CHECK (payment_status IN ('pending', 'paid', 'failed')),
+  paid_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 CREATE INDEX user_activity_user_id_idx ON user_activity(user_id);
 CREATE INDEX audit_log_actor_id_idx ON audit_log(actor_id);
 CREATE INDEX audit_log_created_at_idx ON audit_log(created_at DESC);
@@ -168,6 +187,7 @@ CREATE INDEX project_files_project_id_idx ON project_files(project_id);
 CREATE INDEX messages_project_id_idx ON messages(project_id);
 CREATE INDEX message_attachments_message_id_idx ON message_attachments(message_id);
 CREATE INDEX notifications_user_id_idx ON notifications(user_id);
+CREATE INDEX checkout_carts_payment_status_idx ON checkout_carts(payment_status);
 
 -- Development/demo administrator. Change this password immediately in production.
 INSERT INTO users (full_name, email, password_hash, role)

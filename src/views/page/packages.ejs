@@ -1,0 +1,47 @@
+<%- include('../partials/head', { title, pageCss: 'packages' }) %>
+<section class="packages-hero page-shell">
+  <div>
+    <p class="eyebrow">Website packages / Clear pricing</p>
+    <h1>A strong starting point for every kind of ambition.</h1>
+  </div>
+  <p>Choose a foundation, shape it with optional add-ons, and send your selection to checkout. We confirm the final scope with you before work begins.</p>
+</section>
+
+<section class="package-picker page-shell" aria-label="Choose a website package">
+  <div class="package-grid">
+    <% Object.entries(packages).forEach(([key, item]) => { %>
+      <article class="package-option<%= key === 'standard' ? ' featured' : '' %>" data-package-card data-package="<%= key %>" data-price="<%= item.price %>">
+        <div class="package-option-top"><span class="package-label"><%= item.name %></span><span class="package-tag"><%= item.tag %></span></div>
+        <p><%= item.description %></p>
+        <div class="package-price"><sup>$</sup><%= item.price %><small> starting</small></div>
+        <ul>
+          <% item.features.forEach((feature) => { %><li><span aria-hidden="true">✓</span><%= feature %></li><% }) %>
+        </ul>
+        <button class="package-choice" type="button">Choose <%= item.name %> <span aria-hidden="true">→</span></button>
+      </article>
+    <% }) %>
+  </div>
+</section>
+
+<section class="package-addons page-shell">
+  <div class="addons-copy"><p class="eyebrow">Build your scope</p><h2>Optional add-ons</h2><p>Add only what your business needs today. Every add-on is priced clearly and included in the checkout estimate.</p></div>
+  <div class="addon-list">
+    <% Object.entries(addOns).forEach(([name, item]) => { %>
+      <label class="addon-option"><input type="checkbox" data-package-addon value="<%= name %>" data-price="<%= item.price %>"><span><b><%= name %></b><small><%= item.description %></small></span><strong>+$<%= item.price %></strong></label>
+    <% }) %>
+  </div>
+</section>
+
+<section class="package-summary page-shell">
+  <div><p class="eyebrow">Your estimate</p><h2 id="packages-total">$250</h2><p id="packages-selection">Standard package</p></div>
+  <div class="estimate-detail"><span>Package</span><b id="packages-package-name">Standard</b><span>Add-ons</span><b id="packages-addons-total">$0</b></div>
+  <div><button class="button button-blue" id="packages-checkout" type="button">Continue to checkout <span aria-hidden="true">→</span></button><p class="package-status" id="packages-status" role="status" aria-live="polite"></p></div>
+</section>
+
+<section class="package-notes page-shell">
+  <article><span class="note-icon" aria-hidden="true">◎</span><h3>Clear scope</h3><p>We refine pages, content, functionality, and timeline together before development starts.</p></article>
+  <article><span class="note-icon" aria-hidden="true">↗</span><h3>Flexible growth</h3><p>Start with the right foundation and add capabilities as your business evolves.</p></article>
+  <article><span class="note-icon" aria-hidden="true">✓</span><h3>Human support</h3><p>You get progress updates, a careful launch, and a team you can reach after handover.</p></article>
+</section>
+<script src="/js/packages.js?v=20260927-packages" defer></script>
+<%- include('../partials/foot') %>

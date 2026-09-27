@@ -49,6 +49,11 @@ The project remains on Node.js and Express as established in the product bluepri
 - Terminate TLS at Render or the production reverse proxy; the application redirects non-HTTPS production requests.
 - Run `src/database/rebuild.sql` against the target PostgreSQL database before starting the service.
 - Configure SMTP values in `.env` before enabling email notifications.
+- Configure Flutterwave before enabling online checkout: `FLW_SECRET_KEY`, `FLW_PUBLIC_KEY`, and optional `FLW_CURRENCY` (defaults to `USD`). Set `APP_URL` to the public HTTPS URL so Flutterwave can return to `/checkout/complete`.
+
+## Checkout and payments
+
+Package selections, optional add-ons, customer checkout details, Flutterwave references, payment status, and verified transaction IDs are stored in the PostgreSQL `checkout_carts` table. The session stores only authentication and CSRF state; cart and payment state is not kept in process memory. The application creates this table automatically for an existing installation, or it is included in `src/database/rebuild.sql` for a fresh database.
 
 ## Seeded administrator and backups
 

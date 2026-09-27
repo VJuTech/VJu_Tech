@@ -22,6 +22,11 @@ module.exports = {
   sessionSecret: process.env.SESSION_SECRET || 'replace-this-session-secret',
   sessionIdleTimeoutMs: Number(process.env.SESSION_IDLE_TIMEOUT_MS || 30 * 60 * 1000),
   appUrl: process.env.APP_URL || `http://localhost:${process.env.PORT || 3000}`,
+  flutterwave: {
+    secretKey: process.env.FLW_SECRET_KEY,
+    publicKey: process.env.FLW_PUBLIC_KEY,
+    currency: process.env.FLW_CURRENCY || 'USD'
+  },
   smtp: {
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT || 587),

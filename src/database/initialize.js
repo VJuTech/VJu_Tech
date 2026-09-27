@@ -14,6 +14,30 @@ async function ensureAdminAccount() {
   );
 }
 
+async function ensureCheckoutSchema() {
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS checkout_carts (
+      id BIGSERIAL PRIMARY KEY,
+      session_id VARCHAR(255) NOT NULL UNIQUE,
+      package_key VARCHAR(30) NOT NULL CHECK (package_key IN ('basic', 'standard', 'premium')),
+      package_name VARCHAR(80) NOT NULL,
+      package_price NUMERIC(14, 2) NOT NULL CHECK (package_price >= 0),
+      add_ons JSONB NOT NULL DEFAULT '[]'::jsonb,
+      total NUMERIC(14, 2) NOT NULL CHECK (total >= 0),
+      customer_name VARCHAR(160),
+      customer_email VARCHAR(255),
+      company VARCHAR(160),
+      transaction_ref VARCHAR(180) UNIQUE,
+      flutterwave_transaction_id VARCHAR(180),
+      payment_status VARCHAR(30) NOT NULL DEFAULT 'pending' CHECK (payment_status IN ('pending', 'paid', 'failed')),
+      paid_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS checkout_carts_payment_status_idx ON checkout_carts(payment_status);
+  `);
+}
+
 async function initializeDatabase() {
   const result = await db.query(
     `SELECT table_name
@@ -25,6 +49,7 @@ async function initializeDatabase() {
   const existingTables = new Set(result.rows.map((row) => row.table_name));
 
   if (existingTables.size === requiredTables.length) {
+    await ensureCheckoutSchema();
     await ensureAdminAccount();
     return;
   }
@@ -46,6 +71,7 @@ async function initializeDatabase() {
         CREATE INDEX IF NOT EXISTS audit_log_created_at_idx ON audit_log(created_at DESC);
       `);
       await ensureAdminAccount();
+      await ensureCheckoutSchema();
       console.log('PostgreSQL audit schema initialized.');
       return;
     }
@@ -54,6 +80,7 @@ async function initializeDatabase() {
 
   const schema = await fs.readFile(path.join(__dirname, 'rebuild.sql'), 'utf8');
   await db.query(schema);
+  await ensureCheckoutSchema();
   console.log('PostgreSQL schema initialized.');
 }
 

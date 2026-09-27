@@ -6,18 +6,24 @@ const { requireAuth, requireAdmin } = require('../middleware/auth');
 const portalController = require('../controllers/portalController');
 const adminController = require('../controllers/adminController');
 const reportController = require('../controllers/reportController');
+const cartController = require('../controllers/cartController');
 
 const router = express.Router();
 
 router.get('/', siteController.renderHome);
 router.get('/about', siteController.renderAbout);
 router.get('/services', siteController.renderServices);
+router.get('/packages', siteController.renderPackages);
 router.get('/portfolio', siteController.renderPortfolio);
 router.get('/blog', siteController.renderBlog);
 router.get('/contact', siteController.renderContact);
 router.post('/contact', contactController.submitContactMessage);
 router.get('/inquiry', siteController.renderInquiry);
 router.post('/inquiry', contactController.submitInquiry);
+router.post('/cart', cartController.addCart);
+router.get('/checkout', cartController.renderCheckout);
+router.post('/checkout/pay', cartController.startPayment);
+router.get('/checkout/complete', cartController.completePayment);
 router.get('/login', authController.renderLogin);
 router.post('/login', authController.login);
 router.get('/register', authController.renderRegister);
