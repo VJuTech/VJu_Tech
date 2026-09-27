@@ -3,7 +3,12 @@ const env = require('../config/env');
 
 const pool = new Pool({
   connectionString: env.databaseUrl,
-  ssl: env.databaseSsl ? { rejectUnauthorized: false } : false
+  ssl: env.databaseSsl ? { rejectUnauthorized: false } : false,
+  connectionTimeoutMillis: 10000,
+  idleTimeoutMillis: 30000,
+  keepAlive: true,
+  keepAliveInitialDelayMillis: 10000,
+  maxLifetimeSeconds: 300
 });
 
 pool.on('error', (error) => {
