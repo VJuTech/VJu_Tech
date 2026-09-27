@@ -2,7 +2,6 @@ const adminModel = require('../models/adminModel');
 const contentModel = require('../models/contentModel');
 const projectModel = require('../models/projectModel');
 const auditModel = require('../models/auditModel');
-const storage = require('../services/storage');
 
 function slugify(value) {
   return String(value || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -66,7 +65,11 @@ async function saveContent(req, res, next) {
   const required = type === 'portfolio' ? [values.title, values.slug, values.summary] : [values.title, values.slug, values.body];
   if (required.some((value) => !value)) return res.status(400).render('management/content-editor', { title: `Edit ${type}`, type, item: { ...values, published: req.body.published === 'on' }, error: 'Title, slug, and the required content fields must be completed.' });
   try {
-    if (req.file) values.imageKey = await storage.saveContentImage(req.file);
+        if (req.file) {
+          values.imageData = req.file.buffer;
+          values.imageMimeType = req.file.mimetype;
+          values.imageKey = null;
+        }
     const id = req.params.id;
     const saved = type === 'portfolio'
       ? (id ? await contentModel.updatePortfolio(id, values) : await contentModel.createPortfolio(values))
@@ -79,6 +82,18 @@ async function saveContent(req, res, next) {
       return res.status(409).render('management/content-editor', {
         title: `Edit ${type}`, type, item: { ...values, published: values.published },
         error: 'That URL slug is already in use. Choose a different slug and try again.'
+      });
+    }
+    if (error.code === 'LIMIT_FILE_SIZE' || error.name === 'MulterError') {
+      return res.status(400).render('management/content-editor', {
+        title: `Edit ${type}`, type, item: { ...values, published: values.published },
+        error: 'The image could not be uploaded. Use JPG, PNG, WebP, or GIF up to 5 MB and try again.'
+      });
+    }
+    if (error.code && error.code.startsWith('23')) {
+      return res.status(400).render('management/content-editor', {
+        title: `Edit ${type}`, type, item: { ...values, published: values.published },
+        error: 'The content could not be saved because one of the submitted values is invalid. Check the fields and try again.'
       });
     }
     return next(error);

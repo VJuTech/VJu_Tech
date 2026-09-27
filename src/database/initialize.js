@@ -38,6 +38,15 @@ async function ensureCheckoutSchema() {
   `);
 }
 
+async function ensureContentImageSchema() {
+  await db.query(`
+    ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS image_data BYTEA;
+    ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS image_mime_type VARCHAR(80);
+    ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS image_data BYTEA;
+    ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS image_mime_type VARCHAR(80);
+  `);
+}
+
 async function initializeDatabase() {
   const result = await db.query(
     `SELECT table_name
@@ -50,6 +59,7 @@ async function initializeDatabase() {
 
   if (existingTables.size === requiredTables.length) {
     await ensureCheckoutSchema();
+    await ensureContentImageSchema();
     await ensureAdminAccount();
     return;
   }
@@ -72,6 +82,7 @@ async function initializeDatabase() {
       `);
       await ensureAdminAccount();
       await ensureCheckoutSchema();
+      await ensureContentImageSchema();
       console.log('PostgreSQL audit schema initialized.');
       return;
     }
@@ -81,6 +92,7 @@ async function initializeDatabase() {
   const schema = await fs.readFile(path.join(__dirname, 'rebuild.sql'), 'utf8');
   await db.query(schema);
   await ensureCheckoutSchema();
+  await ensureContentImageSchema();
   console.log('PostgreSQL schema initialized.');
 }
 

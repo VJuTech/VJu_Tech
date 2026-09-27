@@ -1,5 +1,5 @@
 <%- include('../partials/head', { title, pageCss: 'content-admin' }) %>
-<% const isPortfolio = type === 'portfolio'; const action = item ? `/admin/content/${type}/${item.id}` : `/admin/content/new/${type}`; const currentImage = item?.image_key || item?.imageKey || ''; %>
+<% const isPortfolio = type === 'portfolio'; const action = item ? `/admin/content/${type}/${item.id}` : `/admin/content/new/${type}`; const currentImage = item?.image_key || item?.imageKey || ''; const previewImage = item?.has_image ? '/content-image/' + type + '/' + item.id : currentImage; %>
 <section class="page-heading page-shell"><p class="eyebrow">Admin / <%= isPortfolio ? 'portfolio' : 'blog' %></p><h1><%= item ? 'Refine this piece.' : `Create a ${isPortfolio ? 'case study' : 'blog post'}.` %></h1><p>Save as a draft while you work, then publish when the content is ready for the public site.</p></section>
 <form class="content-editor page-shell" action="<%= action %>" method="post" enctype="multipart/form-data">
   <input type="hidden" name="_csrf" value="<%= csrfToken %>">
@@ -30,7 +30,7 @@
     <label for="content-image-file">Upload image</label>
     <input id="content-image-file" name="imageFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
     <small>JPG, PNG, WebP, or GIF up to 5 MB.</small>
-    <% if (currentImage) { %><img class="editor-image-preview" src="<%= currentImage %>" alt="Current content image"><% } %>
+    <% if (previewImage) { %><img class="editor-image-preview" src="<%= previewImage %>" alt="Current content image"><% } %>
     <div class="editor-publish"><label><input type="checkbox" name="published"<%= item?.published ? ' checked' : '' %>> Publish this content</label><span>Published entries appear on the public <%= isPortfolio ? 'portfolio' : 'blog' %> page.</span></div>
     <div class="editor-actions"><button class="button button-blue" type="submit"><%= item ? 'Save changes' : 'Create draft' %> <span aria-hidden="true">→</span></button><a class="button button-dark" href="/admin/content">Cancel</a></div>
   </div>

@@ -32,6 +32,14 @@ function renderInquiry(req, res) {
 async function renderBlog(req, res, next) {
   try { return res.render('management/blogs', { title: 'Insights', posts: await contentModel.findPublishedPosts() }); } catch (error) { return next(error); }
 }
+async function renderContentImage(req, res, next) {
+  try {
+    const image = await contentModel.findImage(req.params.type, req.params.id);
+    if (!image?.image_data) return res.sendStatus(404);
+    res.type(image.image_mime_type || 'application/octet-stream');
+    return res.send(image.image_data);
+  } catch (error) { return next(error); }
+}
 
 function renderLogin(req, res) {
   res.render('account/login', { title: 'Client login' });
@@ -43,5 +51,5 @@ function renderRegister(req, res) {
 
 module.exports = {
   renderHome, renderAbout, renderServices, renderPackages, renderPortfolio, renderContact, renderInquiry,
-  renderBlog, renderLogin, renderRegister
+  renderBlog, renderContentImage, renderLogin, renderRegister
 };
