@@ -15,6 +15,25 @@
       <textarea id="content-summary" name="summary" rows="3" required><%= item?.summary || '' %></textarea>
       <label for="content-description">Full description</label>
       <textarea id="content-description" name="description" rows="8"><%= item?.description || '' %></textarea>
+      <div class="editor-field-grid">
+        <div><label for="content-problem">Client problem</label><textarea id="content-problem" name="problem" rows="5"><%= item?.problem || '' %></textarea></div>
+        <div><label for="content-solution">Your solution</label><textarea id="content-solution" name="solution" rows="5"><%= item?.solution || '' %></textarea></div>
+        <div><label for="content-result">Result / impact</label><textarea id="content-result" name="result" rows="5"><%= item?.result || '' %></textarea></div>
+      </div>
+      <label for="content-role">Your role</label>
+      <input id="content-role" name="role" value="<%= item?.role || '' %>" placeholder="Lead developer & product designer">
+      <div class="editor-field-grid editor-field-grid-compact">
+        <div><label for="content-timeline">Timeline</label><input id="content-timeline" name="timeline" value="<%= item?.timeline || '' %>" placeholder="8 weeks"></div>
+        <div><label for="content-technologies">Technologies</label><input id="content-technologies" name="technologies" value="<%= item?.technologies || '' %>" placeholder="HTML, CSS, Node.js, PostgreSQL"></div>
+      </div>
+      <label for="content-client-name">Client / brand name</label>
+      <input id="content-client-name" name="clientName" value="<%= item?.client_name || item?.clientName || '' %>" placeholder="Delta Chamber">
+      <label for="content-client-logo">Client logo path or URL</label>
+      <input id="content-client-logo" name="clientLogo" value="<%= item?.client_logo || item?.clientLogo || '' %>" placeholder="/images/site/client-logo.svg">
+      <label for="content-testimonial">Client testimonial</label>
+      <textarea id="content-testimonial" name="testimonial" rows="4" placeholder="A short quote from the client"><%= item?.testimonial || '' %></textarea>
+      <label for="content-testimonial-author">Testimonial attribution</label>
+      <input id="content-testimonial-author" name="testimonialAuthor" value="<%= item?.testimonial_author || item?.testimonialAuthor || '' %>" placeholder="Name, role — Company">
       <label for="content-link">Project link</label>
       <input id="content-link" name="projectLink" type="url" value="<%= item?.project_link || '' %>" placeholder="https://example.com">
     <% } else { %>
@@ -32,6 +51,7 @@
     <small>JPG, PNG, WebP, or GIF up to 5 MB.</small>
     <% if (previewImage) { %><img class="editor-image-preview" src="<%= previewImage %>" alt="Current content image"><% } %>
     <div class="editor-publish"><label><input type="checkbox" name="published"<%= item?.published ? ' checked' : '' %>> Publish this content</label><span>Published entries appear on the public <%= isPortfolio ? 'portfolio' : 'blog' %> page.</span></div>
+    <% if (isPortfolio) { %><div class="editor-publish"><label><input type="checkbox" name="featured"<%= item?.featured ? ' checked' : '' %>> Feature this project</label><span>Featured projects are shown first, up to 10 total.</span></div><label for="content-sort-order">Featured order</label><input id="content-sort-order" name="sortOrder" type="number" min="0" value="<%= item?.sort_order ?? 0 %>"><% } %>
     <div class="editor-actions"><button class="button button-blue" type="submit"><%= item ? 'Save changes' : 'Create draft' %> <span aria-hidden="true">→</span></button><a class="button button-dark" href="/admin/content">Cancel</a></div>
   </div>
   <aside class="editor-guide"><p class="eyebrow">Publishing checklist</p><h2>Make it useful.</h2><ul><li>Use a specific, honest title.</li><li>Write for the people you want to reach.</li><li>Check links and image paths before publishing.</li><li>Keep drafts private until they are ready.</li></ul></aside>

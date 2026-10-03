@@ -1,4 +1,38 @@
 <%- include('../partials/head', { title, pageCss: 'portfolio' }) %>
-<section class="page-heading page-shell"><p class="eyebrow">Selected work</p><h1>Useful outcomes over shiny launches.</h1></section>
-<section class="case-grid page-shell"><% if (!items.length) { %><p class="empty-state">Published case studies will appear here soon.</p><% } %><% items.forEach((item) => { %><article><% if (item.has_image) { %><img class="content-image" src="/content-image/portfolio/<%= item.id %>" alt=""><% } else if (item.image_key) { %><img class="content-image" src="<%= item.image_key %>" alt=""><% } %><p class="case-number">Case study</p><h2><%= item.title %></h2><p><%= item.summary %></p><% if (item.description) { %><p class="case-detail"><%= item.description %></p><% } %><% if (item.project_link) { %><a class="text-link" href="<%= item.project_link %>" target="_blank" rel="noopener">View project <span aria-hidden="true">↗</span></a><% } %></article><% }) %></section>
+<section class="page-heading page-shell">
+  <p class="eyebrow">Selected work / 01—10</p>
+  <h1>Useful outcomes over shiny launches.</h1>
+  <p>Explore a focused selection of digital products built to solve real business problems and keep delivering after launch.</p>
+</section>
+<section class="portfolio-services page-shell" aria-label="Services">
+  <div><span class="service-index">01</span><strong>Web development</strong><p>Fast, accessible websites and platforms that are easy to manage.</p></div>
+  <div><span class="service-index">02</span><strong>UI/UX design</strong><p>Clear interfaces shaped around the people who use them.</p></div>
+  <div><span class="service-index">03</span><strong>Maintenance</strong><p>Ongoing improvements, support, and dependable technical care.</p></div>
+</section>
+<section class="case-grid page-shell">
+  <% if (!items.length) { %><p class="empty-state">Published case studies will appear here soon.</p><% } %>
+  <% items.forEach((item, index) => { %>
+    <article class="case-card">
+      <% if (item.has_image) { %><img class="content-image" src="/content-image/portfolio/<%= item.id %>" alt="<%= item.title %> screenshot"><% } else if (item.image_key) { %><img class="content-image" src="<%= item.image_key %>" alt="<%= item.title %> screenshot"><% } %>
+      <div class="case-card-body">
+        <p class="case-number"><%= String(index + 1).padStart(2, '0') %> / Case study</p>
+        <h2><%= item.title %></h2>
+        <p class="case-summary"><%= item.summary %></p>
+        <div class="case-meta"><span><b>Role</b><%= item.role || 'Digital partner' %></span><span><b>Timeline</b><%= item.timeline || '—' %></span><span><b>Tools</b><%= item.technologies || 'Web technologies' %></span></div>
+        <% if (item.problem || item.solution || item.result) { %>
+          <div class="case-study">
+            <% if (item.problem) { %><div><b>Problem</b><p><%= item.problem %></p></div><% } %>
+            <% if (item.solution) { %><div><b>Solution</b><p><%= item.solution %></p></div><% } %>
+            <% if (item.result) { %><div><b>Result</b><p><%= item.result %></p></div><% } %>
+          </div>
+        <% } %>
+        <% if (item.project_link) { %><a class="text-link" href="<%= item.project_link %>" target="_blank" rel="noopener">View live project <span aria-hidden="true">↗</span></a><% } %>
+      </div>
+    </article>
+  <% }) %>
+</section>
+<% const brands = items.filter((item) => item.client_name); const quotes = items.filter((item) => item.testimonial); %>
+<% if (brands.length) { %><section class="brand-strip page-shell"><p class="eyebrow">Trusted by growing teams</p><div class="brand-list"><% brands.forEach((item) => { %><div class="brand-item"><% if (item.client_logo) { %><img src="<%= item.client_logo %>" alt=""><% } %><span><%= item.client_name %></span></div><% }) %></div></section><% } %>
+<% if (quotes.length) { %><section class="testimonial-section page-shell"><p class="eyebrow">Client perspective</p><div class="testimonial-grid"><% quotes.slice(0, 3).forEach((item) => { %><figure><blockquote>“<%= item.testimonial %>”</blockquote><figcaption><%= item.testimonial_author || item.client_name || 'Client partner' %></figcaption></figure><% }) %></div></section><% } %>
+<section class="portfolio-cta page-shell"><div><p class="eyebrow">Have a useful idea?</p><h2>Let’s make it work in the real world.</h2></div><div class="cta-actions"><a class="button button-dark" href="/inquiry">Start your project <span>↗</span></a><a class="text-link" href="/contact">Request a quote <span>↗</span></a></div></section>
 <%- include('../partials/foot') %>

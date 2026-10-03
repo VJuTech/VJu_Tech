@@ -11,7 +11,12 @@ function contentFormValues(body) {
   return {
     title: String(body.title || '').trim(), slug: slugify(body.slug || body.title), summary: String(body.summary || '').trim(),
     description: String(body.description || '').trim(), excerpt: String(body.excerpt || '').trim(), body: String(body.body || '').trim(),
-    imageKey: String(body.imageKey || '').trim(), projectLink: String(body.projectLink || '').trim(), published: body.published === 'on'
+    problem: String(body.problem || '').trim(), solution: String(body.solution || '').trim(), result: String(body.result || '').trim(),
+    role: String(body.role || '').trim(), timeline: String(body.timeline || '').trim(), technologies: String(body.technologies || '').trim(),
+    clientName: String(body.clientName || '').trim(), clientLogo: String(body.clientLogo || '').trim(),
+    testimonial: String(body.testimonial || '').trim(), testimonialAuthor: String(body.testimonialAuthor || '').trim(),
+    imageKey: String(body.imageKey || '').trim(), projectLink: String(body.projectLink || '').trim(),
+    featured: body.featured === 'on', sortOrder: Math.max(0, Number.parseInt(body.sortOrder, 10) || 0), published: body.published === 'on'
   };
 }
 

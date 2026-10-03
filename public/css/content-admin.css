@@ -2,3 +2,8 @@
 @media (max-width: 900px) { .content-toolbar { grid-template-columns: repeat(3, 1fr); }.content-actions { grid-column: 1 / -1; justify-content: start; }.content-cards { grid-template-columns: repeat(2, 1fr); }.content-editor { gap: 35px; grid-template-columns: 1fr; }.editor-guide { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; padding-top: 28px; } }
 @media (max-width: 600px) { .content-toolbar { gap: 14px; grid-template-columns: repeat(3, 1fr); }.content-toolbar strong { font-size: 1.8rem; }.content-actions { display: block; }.content-actions .button { margin: 4px 0; }.content-cards { grid-template-columns: 1fr; }.content-library-heading { align-items: start; display: block; }.content-library-heading > a { display: inline-block; margin-top: 12px; }.editor-publish { align-items: start; display: block; }.editor-publish span { display: block; margin-top: 8px; } }
 .editor-image-preview { border: 1px solid var(--line); display: block; height: 150px; margin-top: 15px; max-width: 240px; object-fit: cover; width: 100%; }
+.editor-field-grid { display: grid; gap: 16px; grid-template-columns: repeat(3, 1fr); }
+.editor-field-grid label { margin-top: 22px; }
+.editor-field-grid-compact { grid-template-columns: 1fr 2fr; }
+.is-featured { color: var(--purple-dark); }
+@media (max-width: 700px) { .editor-field-grid, .editor-field-grid-compact { grid-template-columns: 1fr; } }

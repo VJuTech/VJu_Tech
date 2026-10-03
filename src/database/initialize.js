@@ -44,6 +44,18 @@ async function ensureContentImageSchema() {
     ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS image_mime_type VARCHAR(80);
     ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS image_data BYTEA;
     ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS image_mime_type VARCHAR(80);
+    ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS problem TEXT;
+    ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS solution TEXT;
+    ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS result TEXT;
+    ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS role VARCHAR(160);
+    ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS timeline VARCHAR(120);
+    ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS technologies TEXT;
+    ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS client_name VARCHAR(160);
+    ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS client_logo TEXT;
+    ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS testimonial TEXT;
+    ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS testimonial_author VARCHAR(160);
+    ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS featured BOOLEAN NOT NULL DEFAULT FALSE;
+    ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS sort_order INTEGER NOT NULL DEFAULT 0;
   `);
 }
 
