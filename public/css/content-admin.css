@@ -6,4 +6,6 @@
 .editor-field-grid label { margin-top: 22px; }
 .editor-field-grid-compact { grid-template-columns: 1fr 2fr; }
 .is-featured { color: var(--purple-dark); }
+.editor-check-label { align-items: center; display: flex; gap: 9px; margin-top: 22px; }
+.editor-check-label input { accent-color: var(--purple); height: 17px; padding: 0; width: 17px; }
 @media (max-width: 700px) { .editor-field-grid, .editor-field-grid-compact { grid-template-columns: 1fr; } }

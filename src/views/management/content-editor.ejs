@@ -39,6 +39,10 @@
     <% } else { %>
       <label for="content-excerpt">Excerpt</label>
       <textarea id="content-excerpt" name="excerpt" rows="3"><%= item?.excerpt || '' %></textarea>
+      <div class="editor-field-grid editor-field-grid-compact">
+        <div><label for="content-category">Category</label><select id="content-category" name="category"><% const categories = [{ value: 'web-development', label: 'Web development' }, { value: 'business', label: 'Business tips' }, { value: 'tutorials', label: 'Tutorials' }, { value: 'case-studies', label: 'Case studies' }, { value: 'industry-trends', label: 'Industry trends' }, { value: 'company-updates', label: 'Company updates' }]; categories.forEach((category) => { %><option value="<%= category.value %>"<%= (item?.category || 'web-development') === category.value ? ' selected' : '' %>><%= category.label %></option><% }) %></select></div>
+        <div><label class="editor-check-label"><input type="checkbox" name="featured"<%= item?.featured ? ' checked' : '' %>> Feature this article</label><small>Featured articles lead the public blog page.</small></div>
+      </div>
       <label for="content-body">Article body</label>
       <textarea id="content-body" name="body" rows="16" required><%= item?.body || '' %></textarea>
       <small>Plain text is supported. Keep paragraphs short for comfortable reading.</small>

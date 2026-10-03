@@ -6,7 +6,7 @@ async function findPublishedPortfolio() {
 }
 
 async function findPublishedPosts() {
-  const result = await db.query("SELECT id, title, slug, excerpt, body, image_key, image_data IS NOT NULL AS has_image, published_at FROM blog_posts WHERE published = TRUE ORDER BY published_at DESC NULLS LAST, created_at DESC");
+  const result = await db.query("SELECT id, title, slug, excerpt, body, category, featured, image_key, image_data IS NOT NULL AS has_image, published_at FROM blog_posts WHERE published = TRUE ORDER BY featured DESC, published_at DESC NULLS LAST, created_at DESC");
   return result.rows;
 }
 
@@ -16,7 +16,7 @@ async function findAllPortfolio() {
 }
 
 async function findAllPosts() {
-  const result = await db.query('SELECT id, title, slug, published, published_at, updated_at FROM blog_posts ORDER BY updated_at DESC');
+  const result = await db.query('SELECT id, title, slug, category, featured, published, published_at, updated_at FROM blog_posts ORDER BY featured DESC, updated_at DESC');
   return result.rows;
 }
 
@@ -26,7 +26,7 @@ async function findPortfolioById(id) {
 }
 
 async function findPostById(id) {
-  const result = await db.query('SELECT id, title, slug, excerpt, body, image_key, image_data IS NOT NULL AS has_image, published FROM blog_posts WHERE id = $1', [id]);
+  const result = await db.query('SELECT id, title, slug, excerpt, body, category, featured, image_key, image_data IS NOT NULL AS has_image, published FROM blog_posts WHERE id = $1', [id]);
   return result.rows[0] || null;
 }
 
@@ -49,21 +49,21 @@ async function updatePortfolio(id, { title, slug, summary, description, problem,
   return result.rows[0] || null;
 }
 
-async function createPost({ authorId, title, slug, excerpt, body, imageKey, imageData, imageMimeType, published }) {
+async function createPost({ authorId, title, slug, excerpt, body, category, featured, imageKey, imageData, imageMimeType, published }) {
   const result = await db.query(
-    `INSERT INTO blog_posts (author_id, title, slug, excerpt, body, image_key, image_data, image_mime_type, published, published_at, updated_at)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, CASE WHEN $9 THEN NOW() ELSE NULL END, NOW()) RETURNING id`,
-    [authorId, title, slug, excerpt || null, body, imageKey || null, imageData || null, imageMimeType || null, published]
+    `INSERT INTO blog_posts (author_id, title, slug, excerpt, body, category, featured, image_key, image_data, image_mime_type, published, published_at, updated_at)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, CASE WHEN $11 THEN NOW() ELSE NULL END, NOW()) RETURNING id`,
+    [authorId, title, slug, excerpt || null, body, category || 'web-development', featured, imageKey || null, imageData || null, imageMimeType || null, published]
   );
   return result.rows[0];
 }
 
-async function updatePost(id, { title, slug, excerpt, body, imageKey, imageData, imageMimeType, published }) {
+async function updatePost(id, { title, slug, excerpt, body, category, featured, imageKey, imageData, imageMimeType, published }) {
   const result = await db.query(
-     `UPDATE blog_posts SET title = $2, slug = $3, excerpt = $4, body = $5, image_key = $6,
-       image_data = COALESCE($7, image_data), image_mime_type = COALESCE($8, image_mime_type), published = $9, published_at = CASE WHEN $9 AND published_at IS NULL THEN NOW() WHEN NOT $9 THEN NULL ELSE published_at END, updated_at = NOW()
+     `UPDATE blog_posts SET title = $2, slug = $3, excerpt = $4, body = $5, category = $6, featured = $7, image_key = $8,
+       image_data = COALESCE($9, image_data), image_mime_type = COALESCE($10, image_mime_type), published = $11, published_at = CASE WHEN $11 AND published_at IS NULL THEN NOW() WHEN NOT $11 THEN NULL ELSE published_at END, updated_at = NOW()
      WHERE id = $1 RETURNING id`,
-     [id, title, slug, excerpt || null, body, imageKey || null, imageData || null, imageMimeType || null, published]
+     [id, title, slug, excerpt || null, body, category || 'web-development', featured, imageKey || null, imageData || null, imageMimeType || null, published]
   );
   return result.rows[0] || null;
 }

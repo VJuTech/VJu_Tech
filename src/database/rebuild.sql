@@ -156,6 +156,8 @@ CREATE TABLE blog_posts (
   slug VARCHAR(240) UNIQUE NOT NULL,
   excerpt TEXT,
   body TEXT NOT NULL,
+  category VARCHAR(40) NOT NULL DEFAULT 'web-development',
+  featured BOOLEAN NOT NULL DEFAULT FALSE,
   image_key TEXT,
   image_data BYTEA,
   image_mime_type VARCHAR(80),

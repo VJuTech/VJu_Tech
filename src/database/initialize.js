@@ -56,6 +56,8 @@ async function ensureContentImageSchema() {
     ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS testimonial_author VARCHAR(160);
     ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS featured BOOLEAN NOT NULL DEFAULT FALSE;
     ALTER TABLE portfolio_items ADD COLUMN IF NOT EXISTS sort_order INTEGER NOT NULL DEFAULT 0;
+    ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS category VARCHAR(40) NOT NULL DEFAULT 'web-development';
+    ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS featured BOOLEAN NOT NULL DEFAULT FALSE;
   `);
 }
 
